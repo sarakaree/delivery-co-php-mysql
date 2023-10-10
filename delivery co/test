@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!-- this code is for redirecting each role to his interface 
+<?php /*
+// Start a session
+session_start();
+
+// Connect to the database (replace with your database connection code)
+$con = mysqli_connect('localhost', 'root', '', 'delivery');
+
+if (isset($_POST['login'])) {
+    $username = $_POST['user_name'];
+    $password = $_POST['password'];
+    $role = $_POST['role'];
+
+    // Mapping of Arabic role labels to English table names, username columns, and user ID columns
+    $roleMapping = array(
+        'التاجر' => array('table' => 'merchant', 'username_column' => 'merchant_name', 'user_id_column' => 'merchant_id', 'password_column'=>'password'),
+        'مندوب الاستلام' => array('table' => 'receiving rep.', 'username_column' => 'rep_name', 'user_id_column' => 'rep_id', 'password_column'=>'rep_password'),
+        'موظف الفرز' => array('table' => 'sorting_off', 'username_column' => 'sorter_name', 'user_id_column' => 'sorter_id', 'password_column'=>'sorter_password'),
+        'مندوب التسليم' => array('table' => 'delivery_rep', 'username_column' => 'delivery_name', 'user_id_column' => 'delivery_id','password_column'=>'delivery_password'),
+        'المراقب' => array('table' => 'trackers', 'username_column' => 'tracker_name', 'user_id_column' => 'tracker_id','password_column'=>'tracker_password'),
+    );
+
+    // Check if the selected role exists in the mapping
+    if (array_key_exists($role, $roleMapping)) {
+        $table = $roleMapping[$role]['table'];
+        $usernameColumn = $roleMapping[$role]['username_column'];
+        $userIdColumn = $roleMapping[$role]['user_id_column'];
+        $passwordColumn = $roleMapping[$role]['password_column'];
+
+        // Debugging: Display the role, table, and username column
+        echo "Role: $role<br>";
+        echo "Table: $table<br>";
+        echo "Username Column: $usernameColumn<br>";
+
+        // Query the corresponding table based on the selected role and username column
+       /* $query = "SELECT * FROM $table WHERE $usernameColumn = ?";
+        $stmt = mysqli_prepare($con, $query);
+        mysqli_stmt_bind_param($stmt, 's', $username);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($row = mysqli_fetch_assoc($result)) {
+            // Verify the password
+            $hashed_password = $row[$passwordColumn];
+
+            // Debugging: Display the hashed password
+            echo "Hashed Password: $hashed_password<br>";
+
+            if (password_verify($password, $hashed_password)) {
+                // Password is correct, set session variables
+                $_SESSION['user_id'] = $row[$userIdColumn];
+                $_SESSION['user_role'] = $role;
+
+                // Redirect based on the role
+                switch ($role) {
+                    case 'التاجر':
+                        header("Location: merchant_interface.php");
+                        break;
+                    case 'مندوب الاستلام':
+                        header("Location: receiving_rep_interface.php");
+                        break;
+                    case 'موظف الفرز':
+                        header("Location: sorting_off_interface.php");
+                        break;
+                    case 'مندوب التسليم':
+                        header("Location: delivery_rep_interface.php");
+                        break;
+                    case 'المراقب':
+                        header("Location: trackers_interface.php");
+                        break;
+                    // Add cases for other roles
+                }
+                exit();
+            } else {
+                echo 'كلمة المرور غير صحيحة.';
+            }
+        } else {
+            echo 'اسم المستخدم غير موجود.';
+        }
+    } else {
+        echo 'الوظيفة غير معرفة.';
+    }
+
+    // Close the database connection
+    mysqli_close($con);*/
+}
+}
+?>
+
+
+<html>
+<head>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body class="sb-nav-fixed bg-dark">
+    <div class="container mt-2">
+        <h1 class="text-center text-light">تسجيل دخول</h1>
+        <form action="" method="post" enctype="multipart/form-data">
+            <div class="form-outline mb-4">
+                <label for="username" class="form-label text-light">اسم المستخدم</label>
+                <input type="text" name="user_name" id="username" class="form-control bg-light" required>
+
+                <label for="role" class="form-label">الوظيفة</label> 
+                <select name="role" id="role" class="form-control btn-outline-info bg-light" required>
+                    <option value="merchant">التاجر</option>
+                    <option value="receiving_rep">مندوب الاستلام</option>
+                    <option value="sorting_off">موظف الفرز</option>
+                    <option value="delivery_rep">مندوب التسليم</option>
+                    <option value="trackers">المراقب</option>
+                </select>
+
+                <label for="userpassword" class="form-label text-light">الرمز السري</label>
+                <div class="input-group">
+                    <input type="password" name="password" id="userpassword" class="form-control bg-light" required>
+                    <span class="input-group-text">
+                        <button type="button" id="togglePassword" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">عرض</button>
+                    </span>
+                </div>
+                <input type="submit" name="login" class="btn btn-outline-info  mt-3" value="تسجيل الدخول">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("userpassword");
+            var toggleButton = document.getElementById("togglePassword");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.textContent = "إخفاء";
+            } else {
+                passwordInput.type = "password";
+                toggleButton.textContent = "عرض";
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+<?php
+session_start();
+$con = mysqli_connect('localhost', 'root', '', 'delivery');
+
+// Check if the user is logged in
+if (!isset($_SESSION['rep_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Fetch orders based on the logged-in representative's locations
+$rep_id = $_SESSION['rep_id'];
+$locations = $_SESSION['locations'];
+
+// Split the locations into an array and enclose each location in single quotes
+$locationList = "'" . implode("','", explode(",", $locations)) . "'";
+
+$query = "SELECT * FROM orders WHERE location IN ($locationList)";
+$result = mysqli_query($con, $query);
+
+if (!$result) {
+    die("Error: " . mysqli_error($con)); // Display the MySQL error message
+}
+
+// Display orders in a table
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>واجهة مندوب الاستلام</title>
+</head>
+<body>
+    <h1>Welcome, <?php echo $_SESSION['employee_name']; ?></h1>
+    <h2>Orders in Your Locations</h2>
+
+    <table border="1">
+        <tr>
+            <th>Order ID</th>
+            <th>User Name</th>
+            <th>Products</th>
+            <!-- Add other order columns here -->
+        </tr>
+        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+            <tr>
+                <td><?php echo $row['order_id']; ?></td>
+                <td><?php echo $row['user_name']; ?></td>
+                <td><?php echo $row['products']; ?></td>
+                <!-- Add other order data columns here -->
+            </tr>
+        <?php } ?>
+    </table>
+
+    <a href="logout.php">Logout</a>
+</body>
+</html>
